@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+    <head>
+            <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+            <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.4.2/css/all.css" integrity="sha384-/rXc/GQVaYpyDdyxK+ecHPVYJSN9bmVFBvjA/9eOB+pb3F2w2N6fc5qB9Ew5yIns" crossorigin="anonymous">
+        <style>
+            #body{
+                text-align: center;
+            }
+        </style>
+
+    </head>
+    <body id ="body">
+            <h1>Quotify</h1><br/>
+            <h4>
+            <nav class="nav  justify-content-center">
+                    <a class=" nav-item nav-link active" href="index.html">Random Quote(API)</a>
+                    <a class=" nav-item nav-link active" href="version3.html">Random Quote(Local)</a>
+                    <a class=" nav-item nav-link" href="#">Add Quote(local)</a>
+                    <a class=" nav-item nav-link " href="version5.html">List All Quotes(Local)</a>
+                  </nav>
+                </h4>
+            <br/>
+            <form>
+            <textarea id="text" cols="100" rows="20"></textarea><br/>
+            <textarea id="text1" cols="100" rows="2"></textarea><br/>
+        </form>
+        <div id='root'>
+              <input type="button" value="save" onclick = "add()">
+                <br/>       
+        </div>
+        <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>  
+        <script>
+            const textareaHandle = document.getElementById('text');
+            const textareaHandle1 = document.getElementById('text1');
+            let rootHandle = document.getElementById('root');
+            let blockquoteHandle = document.getElementById('blockquote');
+
+            let quotes = localStorage.getItem('quotes') ? JSON.parse(localStorage.getItem('quotes')) : [];
+            localStorage.setItem('quotes',JSON.stringify(quotes));
+            function add(){
+               
+            let  saveToLocalStorage = JSON.parse(localStorage.getItem('quotes'));
+            let   result = {
+              quote:textareaHandle.value, author:textareaHandle1.value
+          };
+
+          
+        //   console.log("result",this.textareaHandle.value);
+        if((result.quote.length && result.author.length)!==0){
+          
+            saveToLocalStorage.push(result);
+            // console.log('quote',Object.values(result));
+            localStorage.setItem('quotes',JSON.stringify(saveToLocalStorage));
+            console.log(saveToLocalStorage);
+            swal({
+                title:"saved successfully",
+                text:"add another quote",
+                icon:"success"
+            })
+            }
+            
+            else{
+               swal({title:'oops!!',
+                      text:"something went wrong",
+                      icon:"error"
+                      });
+            }
+            }
+        </script>
+    </body>
+</html>

@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html>
+    <head>
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.4.2/css/all.css" integrity="sha384-/rXc/GQVaYpyDdyxK+ecHPVYJSN9bmVFBvjA/9eOB+pb3F2w2N6fc5qB9Ew5yIns" crossorigin="anonymous">
+<style>
+     #body{
+        text-align:center;
+    }
+        blockquote{
+  font-size: 1.4em;
+  width:60%;
+  margin:50px auto;
+  font-family:Open Sans;
+  font-style:italic;
+  color: #555555;
+  padding:1.2em 30px 1.2em 75px;
+  border-left:8px solid #78C0A8 ;
+  line-height:1.6;
+  position: relative;
+  background:#EDEDED;
+}
+blockquote span{
+  display:block;
+  color:#333333;
+  font-style: normal;
+  font-weight: bold;
+  margin-top:1em;
+}
+</style>
+    </head>
+    <body id ="body">
+            <h1>Quotify</h1><br/>
+            <h4>
+            <nav class="nav  justify-content-center">
+                    <a class=" nav-item nav-link active" href="index.html">Random Quote(API)</a>
+                    <a class=" nav-item nav-link active" href="version3.html">Random Quote(Local)</a>
+                    <a class=" nav-item nav-link" href="version4.html">Add Quote(local)</a>
+                    <a class=" nav-item nav-link " href="#">List All Quotes(Local)</a>
+                  </nav>
+                </h4>
+            <br/>
+        <div id='root'>
+         
+        </div>
+        <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>  
+        <script>
+            const rootHandle = document.getElementById('root');
+
+            function listing(){
+           
+           var saveToLocalStorage = JSON.parse(window.localStorage.getItem('quotes'));
+        //    console.log(saveToLocalStorage);
+          
+
+         saveToLocalStorage.forEach((ele,i) => {
+            let blockquoteHandle = document.createElement('blockquote');
+                const qTag = document.createElement('q');
+                const pTag = document.createElement('p');
+                const spanTag = document.createElement('span');
+              
+                const  qTagText= document.createTextNode(ele.quote);
+                const  spanTagText = document.createTextNode(ele.author);
+               
+                const btnTag = document.createElement('button');//delete button
+                const editTag = document.createElement('button');
+             btnTag.innerHTML =   '<i id  ="i" class="fas fa-trash"></i>';
+            editTag.innerText = 'Edit';
+            btnTag.setAttribute('style',"display:block");
+            btnTag.setAttribute('style',"text-align:right");
+            
+             qTag.appendChild(qTagText);
+               spanTag.appendChild(spanTagText);
+                    pTag.appendChild(qTag);
+                    pTag.appendChild(spanTag);
+                    blockquoteHandle.appendChild(pTag);
+                    blockquoteHandle.appendChild(btnTag);
+                    blockquoteHandle.appendChild(editTag);
+                    rootHandle.appendChild(blockquoteHandle);
+
+                    let editedLocalStorage = [];
+                saveToLocalStorage.forEach(function(ele){
+                         editedLocalStorage.push(ele);
+                 })
+                  console.log('edited',editedLocalStorage); 
+
+                    editTag.addEventListener('click',function(){
+                        var  textAreaTag  = document.createElement('textarea');
+                        var breakTag = document.createElement('br');
+                        
+                        var formTag = document.createElement('form');
+                        var text = document.createTextNode(qTag.innerText);
+                        textAreaTag.appendChild(text);
+                        formTag.appendChild(textAreaTag);
+                        formTag.appendChild(breakTag);
+                        
+                    
+                        blockquoteHandle.replaceChild(formTag,blockquoteHandle.childNodes[0]); 
+
+                        var  text1 =document.createTextNode(spanTag.innerText); 
+                        var textAreaTag2  = document.createElement('textarea');
+                        var breakTag2 = document.createElement('br');
+                        textAreaTag2.appendChild(text1);
+                        formTag.appendChild(textAreaTag2);
+                        formTag.appendChild(breakTag2);
+                        
+            
+                        let buttonSave = document.createElement('input');
+                        buttonSave.setAttribute('type','submit');
+
+                        buttonSave.value = 'save';
+                        formTag.appendChild(buttonSave);
+                        let cancel = document.createElement('input');
+                        cancel.setAttribute('type','submit');
+                        cancel.value= 'cancel';
+                        formTag.appendChild(cancel);
+                    
+
+                        let editIndex = editedLocalStorage.indexOf(saveToLocalStorage[i]);
+                textAreaTag.value = editedLocalStorage[editIndex].quote;
+                textAreaTag2.value = editedLocalStorage[editIndex].author;
+
+                let editQuoteValue = editedLocalStorage[editIndex].quote, editAuthorValue = editedLocalStorage[editIndex].author;
+
+
+                function removeForm(){
+                    blockquoteHandle.removeChild(formTag);
+                   blockquoteHandle.innerHTML = `<q>${editQuoteValue}</q> <br/> <span>~ ${editAuthorValue} </span>`
+                    textAreaTag.appendChild(text);
+                    blockquoteHandle.appendChild(btnTag);
+                    blockquoteHandle.appendChild(editTag);
+                }
+
+                        textAreaTag.addEventListener('change',function(){
+                            editQuoteValue = textAreaTag.value;
+                        buttonSave.addEventListener('click',function(e){
+                            e.preventDefault();
+                            editedLocalStorage[editIndex].quote = editQuoteValue;
+                            localStorage.setItem('quotes',JSON.stringify(editedLocalStorage));
+                            let textTagTextEdited = `${editQuoteValue}`;
+                            console.log(textTagTextEdited);
+                            removeForm();
+
+                        },false);
+                    },false);
+                    textAreaTag2.addEventListener('change',function(){
+                    
+                    editAuthorValue = textAreaTag2.value;
+                    console.log(editAuthorValue);
+                    buttonSave.addEventListener('click',function(e){
+                        e.preventDefault();
+                    
+                        editedLocalStorage[editIndex].author =  editAuthorValue;
+                        localStorage.setItem('quotes',JSON.stringify(editedLocalStorage));
+                        removeForm();
+                    }, false);
+
+                }, false);
+                    function removeQuote(){
+                    textAreaTag.removeChild(text);
+                    blockquoteHandle.removeChild(editTag);
+                    blockquoteHandle.removeChild(btnTag);
+                    // blockquoteHandle.appendChild(formTag);
+                }
+                removeQuote();
+
+                      
+                        cancel.addEventListener('click',function(){
+                        removeForm();
+                        },false);
+
+                      
+                    
+                    },false);
+
+
+                    //delete quote
+                    btnTag.addEventListener('click',function(){
+                        //sweetalert message
+                    swal({
+                       title: "Are you sure?",
+                        text: "Once deleted, you will not be able to recover the quote!",
+                        icon: "warning",
+                         buttons: true,
+                         dangerMode: true,
+                        }).then((willDelete) => {
+                        if (willDelete) {
+                            rootHandle.removeChild(blockquoteHandle);
+                      let deleteIndex = editedLocalStorage.indexOf(saveToLocalStorage[i]);
+                        
+                        editedLocalStorage.splice(deleteIndex,1);
+                        console.log('delete',editedLocalStorage);
+
+                        // i am emptying the old stored quotes
+                        localStorage.removeItem('quotes');
+
+                        //and sending updated quote to local storage
+                        localStorage.setItem('quotes',JSON.stringify(editedLocalStorage));
+                             swal("Poof! Your quote has been deleted!", {
+                                    icon: "success",
+                            });
+                        }
+                        else {
+                                 swal("Your quote is  safe!");
+                             }
+                         });
+                    
+                    },false);
+                        
+             });
+            }
+            listing();
+        </script>
+    </body>
+</html>

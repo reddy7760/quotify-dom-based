@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html>
+    <head>
+<title>version 1</title>
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+<style>
+    #body{
+        text-align:center;
+    }
+    hr {
+                width: 300px;
+            }
+
+    blockquote{
+  font-size: 1.4em;
+  width:60%;
+  margin:50px auto;
+  font-family:Open Sans;
+  font-style:italic;
+  color: #555555;
+  padding:1.2em 30px 1.2em 75px;
+  border-left:8px solid #78C0A8 ;
+  line-height:1.6;
+  position: relative;
+  background:#EDEDED;
+}
+blockquote span{
+  display:block;
+  color:#333333;
+  font-style: normal;
+  font-weight: bold;
+  margin-top:1em;
+}
+</style>
+    </head>
+    <body id ="body">
+        <h1>Quotify</h1><br/>
+        <h4>
+        <nav class="nav  justify-content-center">
+                <a class=" nav-item nav-link active" href="#">Random Quote(API)</a>
+                <a class=" nav-item nav-link active" href="version3.html">Random Quote(Local)</a>
+                <a class=" nav-item nav-link" href="version4.html">Add Quote(local)</a>
+                <a class=" nav-item nav-link " href="version5.html">List All Quotes(Local)</a>
+              </nav>
+            </h4>
+        <br/>
+        <div id='root'>
+                <blockquote id="blockquote" class="blockquote text-center">
+                     
+              </blockquote>
+
+
+                <button id="button" type="button" class="btn btn-outline-primary">Get Another Quote</button><br/>
+               <br/> <button  id = "btn" type="button" class="btn btn-secondary btn-sm">Save to Local
+                  
+                </button>
+                <br/>
+                </div>
+                <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>  
+       
+        <script>
+             let rootHandle = document.getElementById('root');
+             let  btnHandle = document.getElementById('button');
+             let  buttonSaveHandle = document.getElementById('btn');
+             let blockquoteHandle = document.getElementById('blockquote');
+             const qTag = document.createElement('q');
+            const pTag = document.createElement('p');
+            const spanTag = document.createElement('span');
+
+              window.onload  = function(){
+                 invoke();
+                 buttonSaveHandle.disabled = false;
+               }
+            function invoke(){
+                  var  xhr = new XMLHttpRequest();
+                  xhr.open('GET','https://talaikis.com/api/quotes/random/');
+                 xhr.send();
+                 xhr.onload = function(){
+                 users = JSON.parse(xhr.responseText);
+                    qTag.innerHTML = `${users.quote}`;
+                    spanTag.innerHTML = `  ~ ${users.author}`;
+                    pTag.appendChild(qTag);
+                    blockquoteHandle.appendChild(pTag);
+                    pTag.appendChild(spanTag);
+                }
+             }
+           
+                btnHandle.addEventListener('click',function(){     
+                 invoke();
+                 buttonSaveHandle.disabled = false;   
+                },false);
+            
+
+              let quotes = localStorage.getItem('quotes') ? JSON.parse(localStorage.getItem('quotes')) : [];
+                  localStorage.setItem('quotes',JSON.stringify(quotes));
+                    
+                buttonSaveHandle.addEventListener('click',function(){
+                    var output;
+                let  saveToLocalStorage = JSON.parse(localStorage.getItem('quotes'));
+                saveToLocalStorage.push(users);
+                localStorage.setItem('quotes',JSON.stringify(saveToLocalStorage));
+                console.log(saveToLocalStorage);
+                buttonSaveHandle.disabled = true;
+                alert();
+                
+                },false); 
+                
+               function alert(){
+
+                swal({
+                    title: "saved successfully",
+                    text: "You clicked save",
+                    icon: "success"
+                    });
+                }
+                // sweetAlert('hi');
+               
+            
+        </script>
+    </body>
+</html>

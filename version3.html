@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html>
+    <head>
+            <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+        <style>
+            #body{
+        text-align:center;
+    }
+
+                blockquote{
+  font-size: 1.4em;
+  width:60%;
+  margin:50px auto;
+  font-family:Open Sans;
+  font-style:italic;
+  color: #555555;
+  padding:1.2em 30px 1.2em 75px;
+  border-left:8px solid #78C0A8 ;
+  line-height:1.6;
+  position: relative;
+  background:#EDEDED;
+}
+blockquote span{
+  display:block;
+  color:#333333;
+  font-style: normal;
+  font-weight: bold;
+  margin-top:1em;
+}
+        </style>
+
+    </head>
+    <body id ="body">
+            <h1>Quotify</h1><br/>
+
+            <h4>
+                    <nav class="nav  justify-content-center">
+                            <a class=" nav-item nav-link active" href="index.html">Random Quote(API)</a>
+                            <a class=" nav-item nav-link active" href="#">Random Quote(Local)</a>
+                            <a class=" nav-item nav-link" href="version4.html">Add Quote(local)</a>
+                            <a class=" nav-item nav-link " href="version5.html">List All Quotes(Local)</a>
+                          </nav>
+                        </h4>
+        <div id='root'>
+                <blockquote id="blockquote" class="blockquote text-center">
+                     
+                    </blockquote>
+                    <button id="button" type="button" class="btn btn-outline-primary " onclick = "saved()">Get Another Quote</button> 
+                    
+        </div>
+        <script>
+            let rootHandle = document.getElementById('root');
+            let blockquoteHandle = document.getElementById('blockquote');
+            const qTag = document.createElement('q');
+            const pTag = document.createElement('p');
+            const spanTag = document.createElement('span');
+            pTag.appendChild(qTag);
+            pTag.appendChild(spanTag);
+                    blockquoteHandle.appendChild(pTag);
+                    
+            let quotes = localStorage.getItem('quotes') ? JSON.parse(localStorage.getItem('quotes')) : [];
+            localStorage.setItem('quotes',JSON.stringify(quotes));
+            let  saveToLocalStorage = JSON.parse(localStorage.getItem('quotes'));
+            localStorage.setItem('quotes',JSON.stringify(saveToLocalStorage));
+            console.log(saveToLocalStorage);
+            function saved(){   
+                 var index = Math.floor(Math.random() *quotes.length) ;
+                  qTag.innerHTML = quotes[index].quote;
+                  spanTag.innerHTML = quotes[index].author;
+            }
+            
+        </script>
+    </body>
+</html>
